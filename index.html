@@ -815,11 +815,6 @@
                                    style="width: 100%; padding: 10px; border: 2px solid #dfe6e9; border-radius: 10px; font-size: 1rem;">
                         </div>
                         <div>
-                            <label style="font-weight: 600; display: block; margin-bottom: 5px;">Nagroda za poprawną odpowiedź (zł):</label>
-                            <input type="number" id="correctAnswerReward" min="0" step="0.01" value="0.10" 
-                                   style="width: 100%; padding: 10px; border: 2px solid #dfe6e9; border-radius: 10px; font-size: 1rem;">
-                        </div>
-                        <div>
                             <label style="font-weight: 600; display: block; margin-bottom: 5px;">Kara za błędną odpowiedź (zł):</label>
                             <input type="number" id="incorrectAnswerPenalty" min="0" step="0.01" value="0.10" 
                                    style="width: 100%; padding: 10px; border: 2px solid #dfe6e9; border-radius: 10px; font-size: 1rem;">
@@ -945,7 +940,7 @@
         }
 
         // Update game settings from form
-        function updateGameSettings() {
+        function updateGameSettings(silent = false) {
             correctAnswerReward = parseFloat(document.getElementById('correctAnswerReward').value) || 0.10;
             incorrectAnswerPenalty = parseFloat(document.getElementById('incorrectAnswerPenalty').value) || 0.10;
             streakBonusPoints = parseInt(document.getElementById('streakBonusPoints').value) || 10;
@@ -953,7 +948,9 @@
             maxResult = parseInt(document.getElementById('maxResult').value) || 100;
             
             saveGameSettings();
-            alert('Ustawienia gry zostały zapisane!');
+            if (!silent) {
+                alert('Ustawienia gry zostały zapisane!');
+            }
         }
 
         // Populate game settings form
@@ -985,12 +982,14 @@
         }
 
         // Update sticker points setting
-        function updateStickerPoints() {
+        function updateStickerPoints(silent = false) {
             const value = parseInt(document.getElementById('stickerPointsInput').value);
             if (value > 0) {
                 stickerPoints = value;
                 saveStickerSettings();
-                alert('Zapisano ustawienia naklejek!');
+                if (!silent) {
+                    alert('Zapisano ustawienia naklejek!');
+                }
             }
         }
 
@@ -1010,9 +1009,12 @@
         }
 
         // Save all configuration
+        // Save all configuration
         function saveAllConfiguration() {
-            saveGameSettings();
-            saveStickerSettings();
+            // First update all settings from form (silent mode - no individual alerts)
+            updateGameSettings(true);
+            updateStickerPoints(true);
+            // Show one combined confirmation
             alert('✅ Cała konfiguracja została zapisana!');
         }
 
